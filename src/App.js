@@ -17,59 +17,63 @@ function App() {
     const [activeType, setActiveType] = useState(PLUS)
 
     const actionOnClick = (type) => () => {
-        switch (activeType) {
-            case PLUS: {
-                setResVal(prevState => prevState + Number(valInput))
-                const newValInput = (type === EQUAL ?
-                        (resVal + Number(valInput)).toString()
-                        : ''
-                )
-                setValInput(newValInput)
-                break
-            }
-            case MINUS: {
-                setResVal(prevState => prevState - Number(valInput))
-                const newValInput = (type === EQUAL ?
-                        (resVal - Number(valInput)).toString()
-                        : ''
-                )
-                setValInput(newValInput)
-                break
-            }
-            case MULTIPLY: {
-                setResVal(prevState => prevState * Number(valInput))
-                const newValInput = (type === EQUAL ?
-                        (resVal * Number(valInput)).toString()
-                        : ''
-                )
-                setValInput(newValInput)
-                break
-            }
-            case DIVIDE: {
-                if (Number(valInput) === 0) {
-                    message.error('На ноль делить нельзя!')
-                    setValInput('')
-                    inputRef.current.focus({
-                        cursor: 'end',
-                    })
-                    setActiveType(DIVIDE)
-                    return
-                } else {
-                    setResVal(prevState => prevState / Number(valInput))
+        if (valInput) {
+            switch (activeType) {
+                case PLUS: {
+                    setResVal(prevState => prevState + Number(valInput))
                     const newValInput = (type === EQUAL ?
-                            (resVal / Number(valInput)).toString()
+                            (resVal + Number(valInput)).toString()
                             : ''
                     )
                     setValInput(newValInput)
+                    break
                 }
-                break
-            }
-            default: {
-                if (type !== EQUAL) {
-                    setValInput('')
+                case MINUS: {
+                    setResVal(prevState => prevState - Number(valInput))
+                    const newValInput = (type === EQUAL ?
+                            (resVal - Number(valInput)).toString()
+                            : ''
+                    )
+                    setValInput(newValInput)
+                    break
                 }
-                break
+                case MULTIPLY: {
+                    setResVal(prevState => prevState * Number(valInput))
+                    const newValInput = (type === EQUAL ?
+                            (resVal * Number(valInput)).toString()
+                            : ''
+                    )
+                    setValInput(newValInput)
+                    break
+                }
+                case DIVIDE: {
+                    if (Number(valInput) === 0) {
+                        message.error('На ноль делить нельзя!')
+                        setValInput('')
+                        inputRef.current.focus({
+                            cursor: 'end',
+                        })
+                        setActiveType(DIVIDE)
+                        return
+                    } else {
+                        setResVal(prevState => prevState / Number(valInput))
+                        const newValInput = (type === EQUAL ?
+                                (resVal / Number(valInput)).toString()
+                                : ''
+                        )
+                        setValInput(newValInput)
+                    }
+                    break
+                }
+                default: {
+                    if (type !== EQUAL) {
+                        setValInput('')
+                    }
+                    break
+                }
             }
+        } else if (type === EQUAL){
+            setValInput(resVal.toString())
         }
         if (type !== EQUAL) {
             inputRef.current.focus({
@@ -143,7 +147,7 @@ function App() {
                 <Card title="Калькулятор" headStyle={{textAlign: "center"}} className={'card-3 '}
                       style={{maxWidth: 400, width: "100%"}}>
                     <div className={'topCalculator'}>
-                        <p>Value:</p>
+                        <p>Значение:</p>
                         <Tooltip title="Очистить каклькулятор">
                             <Button onClick={clearCalculator} danger icon={<ClearOutlined/>}/>
                         </Tooltip>
